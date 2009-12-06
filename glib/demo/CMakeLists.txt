@@ -20,4 +20,4 @@ set(poppler_glib_demo_SRCS
   layers.c
 )
 poppler_add_test(poppler-glib-demo BUILD_GTK_TESTS ${poppler_glib_demo_SRCS})
-target_link_libraries(poppler-glib-demo poppler-glib ${GTK2_LIBRARIES})
+target_link_libraries(poppler-glib-demo poppler-glib poppler ${GTK2_LIBRARIES})

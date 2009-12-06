@@ -150,6 +150,9 @@ gint main (gint argc, gchar **argv)
 	gchar            *uri;
 	GTimer           *timer;
 	GError           *error = NULL;
+#if GLIB_CHECK_VERSION (2,15,0)
+	GFile *file;
+#endif
 
 	if (argc != 2) {
 		g_print ("Usage: poppler-glib-demo FILE\n");
@@ -162,8 +165,6 @@ gint main (gint argc, gchar **argv)
 	gtk_init (&argc, &argv);
 
 #if GLIB_CHECK_VERSION (2,15,0)
-	GFile *file;
-
 	file = g_file_new_for_commandline_arg (argv[1]);
 	uri = g_file_get_uri (file);
 	g_object_unref (file);

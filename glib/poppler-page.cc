@@ -32,6 +32,11 @@
 #include "poppler.h"
 #include "poppler-private.h"
 
+#if defined (HAVE_CAIRO)
+void poppler_page_render (PopplerPage *page,
+		     cairo_t *cairo);
+#endif
+
 enum
 {
   PROP_0,
