@@ -12,14 +12,14 @@ macro(POPPLER_ADD_TEST exe build_flag)
   add_executable(${exe} ${_add_executable_param} ${ARGN})
 
   # if the tests are EXCLUDE_FROM_ALL, add a target "buildtests" to build all tests
-  if(NOT build_test)
+  if(NOT build_test AND NOT MSVC_IDE)
     get_directory_property(_buildtestsAdded BUILDTESTS_ADDED)
     if(NOT _buildtestsAdded)
       add_custom_target(buildtests)
       set_directory_properties(PROPERTIES BUILDTESTS_ADDED TRUE)
     endif(NOT _buildtestsAdded)
     add_dependencies(buildtests ${exe})
-  endif(NOT build_test)
+  endif(NOT build_test AND NOT MSVC_IDE)
 endmacro(POPPLER_ADD_TEST)
 
 macro(POPPLER_ADD_UNITTEST exe build_flag)
@@ -49,21 +49,26 @@ macro(POPPLER_CREATE_INSTALL_PKGCONFIG generated_file install_location)
 	#endif(NOT WIN32)
 endmacro(POPPLER_CREATE_INSTALL_PKGCONFIG)
 
-macro(SHOW_END_MESSAGE what enabled)
+macro(SHOW_END_MESSAGE what value)
   string(LENGTH ${what} length_what)
   math(EXPR left_char "20 - ${length_what}")
   set(blanks)
   foreach(_i RANGE 1 ${left_char})
     set(blanks "${blanks} ")
   endforeach(_i)
+
+  message("  ${what}:${blanks} ${value}")
+endmacro(SHOW_END_MESSAGE)
+
+macro(SHOW_END_MESSAGE_YESNO what enabled)
   if(${enabled})
     set(enabled_string "yes")
   else(${enabled})
     set(enabled_string "no")
   endif(${enabled})
 
-  message("  ${what}:${blanks} ${enabled_string}")
-endmacro(SHOW_END_MESSAGE)
+  show_end_message("${what}" "${enabled_string}")
+endmacro(SHOW_END_MESSAGE_YESNO)
 
 
 set(CMAKE_SYSTEM_INCLUDE_PATH ${CMAKE_SYSTEM_INCLUDE_PATH}

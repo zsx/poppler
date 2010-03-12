@@ -38,10 +38,10 @@
 #include <TextOutputDev.h>
 #include <Annot.h>
 #include <Link.h>
+#include <ArthurOutputDev.h>
 #if defined(HAVE_SPLASH)
 #include <SplashOutputDev.h>
 #include <splash/SplashBitmap.h>
-#include <ArthurOutputDev.h>
 #endif
 
 #include "poppler-private.h"
@@ -242,7 +242,6 @@ QImage Page::renderToImage(double xres, double yres, int x, int y, int w, int h,
     }
     case Poppler::Document::ArthurBackend:
     {
-#if defined(HAVE_SPLASH)
       QSize size = pageSize();
       QImage tmpimg(w == -1 ? qRound( size.width() * xres / 72.0 ) : w, h == -1 ? qRound( size.height() * yres / 72.0 ) : h, QImage::Format_ARGB32);
 
@@ -251,7 +250,6 @@ QImage Page::renderToImage(double xres, double yres, int x, int y, int w, int h,
           painter.setRenderHint(QPainter::Antialiasing);
       if (m_page->parentDoc->m_hints & Document::TextAntialiasing)
           painter.setRenderHint(QPainter::TextAntialiasing);
-      painter.save();
       painter.translate(x == -1 ? 0 : -x, y == -1 ? 0 : -y);
       ArthurOutputDev arthur_output(&painter);
       arthur_output.startDoc(m_page->parentDoc->doc->getXRef());
@@ -267,10 +265,8 @@ QImage Page::renderToImage(double xres, double yres, int x, int y, int w, int h,
 						 y,
 						 w,
 						 h);
-      painter.restore();
       painter.end();
       img = tmpimg;
-#endif
       break;
     }
   }

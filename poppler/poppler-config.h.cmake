@@ -14,14 +14,39 @@
 // around #undef look odd, but it's to silence warnings about
 // redefining those symbols.
 
+/* Enable multithreading support. */
+#ifndef MULTITHREADED
+#cmakedefine MULTITHREADED 1
+#endif
+
+/* Enable exceptions. */
+#ifndef USE_EXCEPTIONS
+#cmakedefine USE_EXCEPTIONS 1
+#endif
+
+/* Use fixedpoint. */
+#ifndef USE_FIXEDPOINT
+#cmakedefine USE_FIXEDPOINT 1
+#endif
+
 /* Include support for OPI comments. */
 #ifndef OPI_SUPPORT
-#define OPI_SUPPORT 1
+#cmakedefine OPI_SUPPORT 1
 #endif
 
 /* Enable word list support. */
 #ifndef TEXTOUT_WORD_LIST
-#define TEXTOUT_WORD_LIST 1
+#cmakedefine TEXTOUT_WORD_LIST 1
+#endif
+
+/* Use fontconfig font configuration backend */
+#ifndef WITH_FONTCONFIGURATION_FONTCONFIG
+#cmakedefine WITH_FONTCONFIGURATION_FONTCONFIG 1
+#endif
+
+/* Use win32 font configuration backend */
+#ifndef WITH_FONTCONFIGURATION_WIN32
+#cmakedefine WITH_FONTCONFIGURATION_WIN32 1
 #endif
 
 // Also, there's a couple of preprocessor symbols in the header files
@@ -54,10 +79,8 @@
 // Win32 stuff
 //------------------------------------------------------------------------
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
-#ifndef CDECL
-#define CDECL __cdecl
-#endif
+#if defined(_WIN32) && !defined(_MSC_VER)
+#include <windef.h>
 #else
 #define CDECL
 #endif

@@ -11,10 +11,11 @@
 // All changes made under the Poppler project to this file are licensed
 // under GPL version 2 or later
 //
-// Copyright (C) 2006, 2009 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2006, 2009, 2010 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2007 Ilmari Heikkinen <ilmari.heikkinen@gmail.com>
 // Copyright (C) 2009 Shen Liang <shenzhuxi@gmail.com>
 // Copyright (C) 2009 Stefan Thomas <thomas@eload24.com>
+// Copyright (C) 2010 Adrian Johnson <ajohnson@redneon.com>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -269,7 +270,7 @@ Guchar SplashBitmap::getAlpha(int x, int y) {
   return alpha[y * width + x];
 }
 
-SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, char *fileName) {
+SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, char *fileName, int hDPI, int vDPI) {
   FILE *f;
   SplashError e;
 
@@ -277,13 +278,13 @@ SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, char *fileN
     return splashErrOpenFile;
   }
 
-  e = writeImgFile(format, f);
+  e = writeImgFile(format, f, hDPI, vDPI);
   
   fclose(f);
   return e;
 }
 
-SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, FILE *f) {
+SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, FILE *f, int hDPI, int vDPI) {
   ImgWriter *writer;
   
   switch (format) {
@@ -306,12 +307,12 @@ SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, FILE *f) {
       return splashErrGeneric;
   }
   
-  if (mode != splashModeRGB8 && mode != splashModeMono8 && mode != splashModeMono1) {
+  if (mode != splashModeRGB8 && mode != splashModeMono8 && mode != splashModeMono1 && mode != splashModeXBGR8) {
     error(-1, "unsupported SplashBitmap mode");
     return splashErrGeneric;
   }
 
-  if (!writer->init(f, width, height)) {
+  if (!writer->init(f, width, height, hDPI, vDPI)) {
     delete writer;
     return splashErrGeneric;
   }
@@ -333,6 +334,27 @@ SplashError SplashBitmap::writeImgFile(SplashImageFileFormat format, FILE *f) {
         return splashErrGeneric;
       }
       delete[] row_pointers;
+    }
+    break;
+    
+    case splashModeXBGR8:
+    {
+      unsigned char *row = new unsigned char[3 * width];
+      for (int y = 0; y < height; y++) {
+        // Convert into a PNG row
+        for (int x = 0; x < width; x++) {
+          row[3*x] = data[y * rowSize + x * 4 + 2];
+          row[3*x+1] = data[y * rowSize + x * 4 + 1];
+          row[3*x+2] = data[y * rowSize + x * 4];
+        }
+
+        if (!writer->writeRow(&row)) {
+          delete[] row;
+          delete writer;
+          return splashErrGeneric;
+        }
+      }
+      delete[] row;
     }
     break;
     

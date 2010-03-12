@@ -23,6 +23,7 @@
 // Copyright (C) 2009 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2009 William Bader <williambader@hotmail.com>
+// Copyright (C) 2010 Patrick Spendrin <ps_ml@gmx.de>
 //
 // To see a description of the changes please see the Changelog file that
 // came with your tarball or type make ChangeLog if you are building from git
@@ -64,6 +65,11 @@
 #if (__VMS_VER < 70000000)
 extern "C" int unlink(char *filename);
 #endif
+#endif
+
+#ifdef _MSC_VER
+#include <float.h>
+#define isfinite(x) _finite(x)
 #endif
 
 //------------------------------------------------------------------------
@@ -1983,6 +1989,9 @@ void SplashOutputDev::drawImageMask(GfxState *state, Object *ref, Stream *str,
   }
 
   ctm = state->getCTM();
+  for (int i = 0; i < 6; ++i) {
+    if (!isfinite(ctm[i])) return;
+  }
   mat[0] = ctm[0];
   mat[1] = ctm[1];
   mat[2] = -ctm[2];
@@ -2261,6 +2270,9 @@ void SplashOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
   int n, i;
 
   ctm = state->getCTM();
+  for (i = 0; i < 6; ++i) {
+    if (!isfinite(ctm[i])) return;
+  }
   mat[0] = ctm[0];
   mat[1] = ctm[1];
   mat[2] = -ctm[2];
@@ -2528,6 +2540,12 @@ void SplashOutputDev::drawMaskedImage(GfxState *state, Object *ref,
     //----- draw the source image
 
     ctm = state->getCTM();
+    for (i = 0; i < 6; ++i) {
+      if (!isfinite(ctm[i])) {
+        delete maskBitmap;
+        return;
+      }
+    }
     mat[0] = ctm[0];
     mat[1] = ctm[1];
     mat[2] = -ctm[2];
@@ -2639,6 +2657,9 @@ void SplashOutputDev::drawSoftMaskedImage(GfxState *state, Object *ref,
   int n, i;
 
   ctm = state->getCTM();
+  for (i = 0; i < 6; ++i) {
+    if (!isfinite(ctm[i])) return;
+  }
   mat[0] = ctm[0];
   mat[1] = ctm[1];
   mat[2] = -ctm[2];

@@ -15,7 +15,7 @@
 //
 // Copyright (C) 2005 Brad Hards <bradh@frogmouth.net>
 // Copyright (C) 2005-2009 Albert Astals Cid <aacid@kde.org>
-// Copyright (C) 2008 Pino Toscano <pino@kde.org>
+// Copyright (C) 2008, 2010 Pino Toscano <pino@kde.org>
 // Copyright (C) 2009 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2009 Petr Gajdos <pgajdos@novell.com>
 //
@@ -49,6 +49,7 @@
 #include <QtGui/QPainterPath>
 //------------------------------------------------------------------------
 
+#ifdef HAVE_SPLASH
 #include "splash/SplashFontFileID.h"
 #include "splash/SplashFontFile.h"
 #include "splash/SplashFontEngine.h"
@@ -77,7 +78,7 @@ private:
   Ref r;
 };
 
-
+#endif
 
 //------------------------------------------------------------------------
 // ArthurOutputDev
@@ -94,11 +95,14 @@ ArthurOutputDev::ArthurOutputDev(QPainter *painter):
 
 ArthurOutputDev::~ArthurOutputDev()
 {
+#ifdef HAVE_SPLASH
   delete m_fontEngine;
+#endif
 }
 
 void ArthurOutputDev::startDoc(XRef *xrefA) {
   xref = xrefA;
+#ifdef HAVE_SPLASH
   delete m_fontEngine;
   m_fontEngine = new SplashFontEngine(
 #if HAVE_T1LIB_H
@@ -109,6 +113,7 @@ void ArthurOutputDev::startDoc(XRef *xrefA) {
   gFalse,
 #endif
   m_painter->testRenderHint(QPainter::TextAntialiasing));
+#endif
 }
 
 void ArthurOutputDev::startPage(int pageNum, GfxState *state)
@@ -161,7 +166,17 @@ void ArthurOutputDev::updateCTM(GfxState *state, double m11, double m12,
 
 void ArthurOutputDev::updateLineDash(GfxState *state)
 {
-  // qDebug() << "updateLineDash";
+  double *dashPattern;
+  int dashLength;
+  double dashStart;
+  state->getLineDash(&dashPattern, &dashLength, &dashStart);
+  QVector<qreal> pattern(dashLength);
+  for (int i = 0; i < dashLength; ++i) {
+    pattern[i] = dashPattern[i];
+  }
+  m_currentPen.setDashPattern(pattern);
+  m_currentPen.setDashOffset(dashStart);
+  m_painter->setPen(m_currentPen);
 }
 
 void ArthurOutputDev::updateFlatness(GfxState *state)
@@ -203,8 +218,8 @@ void ArthurOutputDev::updateLineCap(GfxState *state)
 
 void ArthurOutputDev::updateMiterLimit(GfxState *state)
 {
-  // We can't do mitre (or Miter) limit with Qt4 yet.
-  // the limit is in state->getMiterLimit() when we get there
+  m_currentPen.setMiterLimit(state->getMiterLimit());
+  m_painter->setPen(m_currentPen);
 }
 
 void ArthurOutputDev::updateLineWidth(GfxState *state)
@@ -249,6 +264,7 @@ void ArthurOutputDev::updateStrokeOpacity(GfxState *state)
 
 void ArthurOutputDev::updateFont(GfxState *state)
 {
+#ifdef HAVE_SPLASH
   GfxFont *gfxFont;
   GfxFontType fontType;
   SplashOutFontFileID *id;
@@ -474,6 +490,7 @@ void ArthurOutputDev::updateFont(GfxState *state)
   delete id;
  err1:
   return;
+#endif
 }
 
 static QPainterPath convertPath(GfxState *state, GfxPath *path, Qt::FillRule fillRule)
@@ -540,6 +557,7 @@ void ArthurOutputDev::drawChar(GfxState *state, double x, double y,
 			       double dx, double dy,
 			       double originX, double originY,
 			       CharCode code, int nBytes, Unicode *u, int uLen) {
+#ifdef HAVE_SPLASH
   double x1, y1;
 //   SplashPath *path;
   int render;
@@ -636,6 +654,7 @@ void ArthurOutputDev::drawChar(GfxState *state, double x, double y,
     }
     */
   }
+#endif
 }
 
 GBool ArthurOutputDev::beginType3Char(GfxState *state, double x, double y,

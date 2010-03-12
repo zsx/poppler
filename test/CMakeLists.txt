@@ -1,16 +1,21 @@
 
 if (ENABLE_SPLASH)
 
-  set (perf_test_SRCS
-    perf-test.cc
-    perf-test-preview-dummy.cc
-  )
-  add_executable(perf-test ${perf_test_SRCS})
-  target_link_libraries(perf-test poppler)
+  if (HAVE_NANOSLEEP OR LIB_RT_HAS_NANOSLEEP)
+    set (perf_test_SRCS
+      perf-test.cc
+      perf-test-preview-dummy.cc
+    )
+    add_executable(perf-test ${perf_test_SRCS})
+    target_link_libraries(perf-test poppler)
+    if (LIB_RT_HAS_NANOSLEEP)
+      target_link_libraries(perf-test rt)
+    endif (LIB_RT_HAS_NANOSLEEP)
+  endif (HAVE_NANOSLEEP OR LIB_RT_HAS_NANOSLEEP)
 
 endif (ENABLE_SPLASH)
 
-if (GTK_FOUND)
+if (GTK_FOUND AND BUILD_GTK_TESTS)
 
   add_definitions(${GTK2_CFLAGS})
 
@@ -19,11 +24,15 @@ if (GTK_FOUND)
     ${CMAKE_BINARY_DIR}/glib
   )
 
-  set (gtk_splash_test_SRCS
-    gtk-splash-test.cc
-  )
-  poppler_add_test(gtk-splash-test BUILD_GTK_TESTS ${gtk_splash_test_SRCS})
-  target_link_libraries(gtk-splash-test poppler ${GTK2_LIBRARIES})
+  if (ENABLE_SPLASH)
+
+    set (gtk_splash_test_SRCS
+      gtk-splash-test.cc
+    )
+    poppler_add_test(gtk-splash-test BUILD_GTK_TESTS ${gtk_splash_test_SRCS})
+    target_link_libraries(gtk-splash-test poppler ${GTK2_LIBRARIES})
+
+  endif (ENABLE_SPLASH)
 
   if (HAVE_CAIRO)
 
@@ -41,7 +50,7 @@ if (GTK_FOUND)
 
   endif (HAVE_CAIRO)
 
-endif (GTK_FOUND)
+endif (GTK_FOUND AND BUILD_GTK_TESTS)
 
 set (pdf_fullrewrite_SRCS
   pdf-fullrewrite.cc

@@ -17,7 +17,7 @@
 // Copyright (C) 2005, 2006 Kristian Høgsberg <krh@redhat.com>
 // Copyright (C) 2005 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2006, 2007 Jeff Muizelaar <jeff@infidigm.net>
-// Copyright (C) 2006 Carlos Garcia Campos <carlosgc@gnome.org>
+// Copyright (C) 2006, 2010 Carlos Garcia Campos <carlosgc@gnome.org>
 // Copyright (C) 2008 Adrian Johnson <ajohnson@redneon.com>
 //
 // To see a description of the changes please see the Changelog file that
@@ -75,9 +75,8 @@ public:
   virtual ~CairoFreeTypeFont();
 
 private:
-  CairoFreeTypeFont(Ref ref, cairo_font_face_t *cairo_font_face, FT_Face face,
+  CairoFreeTypeFont(Ref ref, cairo_font_face_t *cairo_font_face,
 	    Gushort *codeToGID, int codeToGIDLen, GBool substitute);
-  FT_Face face;
 };
 
 //------------------------------------------------------------------------

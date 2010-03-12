@@ -16,7 +16,7 @@
 // Copyright (C) 2005 Kristian Høgsberg <krh@redhat.com>
 // Copyright (C) 2006, 2007 Jeff Muizelaar <jeff@infidigm.net>
 // Copyright (C) 2006 Carlos Garcia Campos <carlosgc@gnome.org>
-// Copyright (C) 2006-2009 Albert Astals Cid <aacid@kde.org>
+// Copyright (C) 2006-2010 Albert Astals Cid <aacid@kde.org>
 // Copyright (C) 2009 Koji Otani <sho@bbr.jp>
 // Copyright (C) 2009 Thomas Freitag <Thomas.Freitag@alfa.de>
 // Copyright (C) 2009 Christian Persch <chpe@gnome.org>
@@ -2893,7 +2893,7 @@ GfxRadialShading::GfxRadialShading(GfxRadialShading *shading):
   y1 = shading->y1;
   r1 = shading->r1;
   t0 = shading->t0;
-  y1 = shading->t1;
+  t1 = shading->t1;
   nFuncs = shading->nFuncs;
   for (i = 0; i < nFuncs; ++i) {
     funcs[i] = shading->funcs[i]->copy();
@@ -4780,23 +4780,12 @@ void GfxState::getFontTransMat(double *m11, double *m12,
 
 void GfxState::setCTM(double a, double b, double c,
 		      double d, double e, double f) {
-  int i;
-
   ctm[0] = a;
   ctm[1] = b;
   ctm[2] = c;
   ctm[3] = d;
   ctm[4] = e;
   ctm[5] = f;
-
-  // avoid FP exceptions on badly messed up PDF files
-  for (i = 0; i < 6; ++i) {
-    if (ctm[i] > 1e10) {
-      ctm[i] = 1e10;
-    } else if (ctm[i] < -1e10) {
-      ctm[i] = -1e10;
-    }
-  }
 }
 
 void GfxState::concatCTM(double a, double b, double c,
@@ -4805,7 +4794,6 @@ void GfxState::concatCTM(double a, double b, double c,
   double b1 = ctm[1];
   double c1 = ctm[2];
   double d1 = ctm[3];
-  int i;
 
   ctm[0] = a * a1 + b * c1;
   ctm[1] = a * b1 + b * d1;
@@ -4813,15 +4801,6 @@ void GfxState::concatCTM(double a, double b, double c,
   ctm[3] = c * b1 + d * d1;
   ctm[4] = e * a1 + f * c1 + ctm[4];
   ctm[5] = e * b1 + f * d1 + ctm[5];
-
-  // avoid FP exceptions on badly messed up PDF files
-  for (i = 0; i < 6; ++i) {
-    if (ctm[i] > 1e10) {
-      ctm[i] = 1e10;
-    } else if (ctm[i] < -1e10) {
-      ctm[i] = -1e10;
-    }
-  }
 }
 
 void GfxState::shiftCTM(double tx, double ty) {
