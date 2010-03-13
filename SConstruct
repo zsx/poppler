@@ -10,6 +10,7 @@ opts.Add(PathVariable('PERL', 'Path to the executable perl', r'C:\Perl\bin\perl.
 
 env = Environment(variables = opts,
                   ENV=os.environ, tools = ['default', GBuilder])
+Initialize(env)
 
 args = '\
 -DCMAKE_INCLUDE_PATH:PATH=%s/INCLUDE;%s/LIB \
@@ -31,9 +32,10 @@ args = '\
 
 cmd = 'cmake -G "NMake Makefiles" ' + args
 env.Alias("install", 
-    env.Command('poppler.lib', '#CMakeLists.txt', '''
+    env.Command('poppler.lib', ['#CMakeLists.txt', 'glib/libpoppler-glib.def'], '''
         %s
         nmake
         nmake install'''% (cmd)
     )
 )
+SConscript('glib/SConscript', 'env')

@@ -1,0 +1,19 @@
+# vim: ft=python expandtab
+
+Import('env')
+
+poppler_glib_public_headers = Split('''
+  poppler-action.h
+  poppler-date.h
+  poppler-document.h
+  poppler-page.h
+  poppler-attachment.h
+  poppler-form-field.h
+  poppler-annot.h
+  poppler-layer.h
+  poppler.h
+  poppler-enums.h
+''')
+
+env['EXPORT_REGEX']='poppler_'
+env.DefGeneratorByRegex('libpoppler-glib.def', poppler_glib_public_headers)
