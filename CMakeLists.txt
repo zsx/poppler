@@ -39,6 +39,7 @@ else(WIN32)
 endif(WIN32)
 
 set(LIB_SUFFIX "" CACHE STRING "Define suffix of directory name (32/64)")
+set(EXTRA_INCLUDE "" CACHE PATH "Extra INCLUDE PATH")
 
 if(WIN32)
   set(_default_fontconfiguration "win32")
@@ -109,7 +110,6 @@ if(ENABLE_CPP)
   set(ENABLE_CPP ${ICONV_FOUND})
   set(HAVE_ICONV ${ICONV_FOUND})
 endif(ENABLE_CPP)
->>>>>>> master
 if(ENABLE_ZLIB)
   find_package(ZLIB)
   if(ZLIB_FOUND)
@@ -143,6 +143,7 @@ include_directories(
   ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}/poppler
   ${FREETYPE_INCLUDE_DIRS}
+  ${EXTRA_INCLUDE}
 )
 set(HAVE_FREETYPE_H ON)
 if(CMAKE_USE_PTHREADS_INIT)
@@ -544,3 +545,15 @@ show_end_message_yesno("command line utils" ENABLE_UTILS)
 if(USE_FIXEDPOINT AND USE_FLOAT)
   message("Warning: Single precision and fixed point options should not be enabled at the same time")
 endif(USE_FIXEDPOINT AND USE_FLOAT)
+
+if(GLIB_FOUND)
+    message(STATUS "glib2 cflags: ${GLIB2_CFLAGS}")
+    message(STATUS "glib2 link libraries: ${GLIB2_LIBRARIES}")
+    message(STATUS "glib2 link library dirs: ${GLIB2_LIBRARY_DIRS}")
+    message(STATUS "gdk2 cflags: ${GDK2_CFLAGS}")
+    message(STATUS "gdk2 link libraries: ${GDK2_LIBRARIES}")
+    message(STATUS "gdk2 link library dirs: ${GDK2_LIBRARY_DIRS}")
+    message(STATUS "gtk2 cflags: ${GTK2_CFLAGS}")
+    message(STATUS "gtk2 link libkraries: ${GTK2_LIBRARIES}")
+    message(STATUS "gtk2 link library dirs: ${GTK2_LIBRARY_DIRS}")
+endif(GLIB_FOUND)

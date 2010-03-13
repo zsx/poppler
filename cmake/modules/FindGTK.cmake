@@ -61,7 +61,13 @@ if (NOT WIN32)
     find_package_handle_standard_args(GTK DEFAULT_MSG GTK2_LIBRARIES GTK2_CFLAGS)
 
   endif (_LibGTK2IncDir AND _LibGDK2PixbufIncDir AND _LibGThread2IncDir)
-
+else(NOT WIN32)
+	include(FindPkgConfig)
+	pkg_check_modules(GLIB2 glib-2.0>=${GLIB_VERSION})
+	pkg_check_modules(GDK2 gdk-2.0)
+	pkg_check_modules(GTK2 gtk+-2.0>=2.14)
+	set(GLIB_FOUND GLIB2_FOUND)
+	set(GDK_FOUND GDK2_FOUND)
 endif(NOT WIN32)
 
 mark_as_advanced(

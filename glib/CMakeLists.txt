@@ -73,9 +73,21 @@ set(poppler_glib_SRCS
   ${CMAKE_SOURCE_DIR}/poppler/CairoOutputDev.cc
   ${CMAKE_SOURCE_DIR}/poppler/CairoRescaleBox.cc
 )
+if(WIN32)
+    list(APPEND poppler_glib_SRCS libpoppler-glib.def)
+endif(WIN32)
+if(ENABLE_GLIB)
+    link_directories(${GLIB2_LIBRARY_DIRS})
+    if(POPPLER_WITH_GDK)
+        link_directories(${GDK2_LIBRARY_DIRS})
+    endif(POPPLER_WITH_GDK)
+endif(ENABLE_GLIB)
 add_library(poppler-glib SHARED ${poppler_glib_SRCS})
 set_target_properties(poppler-glib PROPERTIES VERSION 4.0.0 SOVERSION 4)
 target_link_libraries(poppler-glib poppler ${GLIB2_LIBRARIES} ${CAIRO_LIBRARIES})
+if(POPPLER_WITH_GDK)
+    target_link_libraries(poppler-glib ${GDK2_LIBRARIES})
+endif(POPPLER_WITH_GDK)
 install(TARGETS poppler-glib RUNTIME DESTINATION bin LIBRARY DESTINATION lib${LIB_SUFFIX} ARCHIVE DESTINATION lib${LIB_SUFFIX})
 
 install(FILES
