@@ -12,8 +12,9 @@ poppler_glib_public_headers = Split('''
   poppler-annot.h
   poppler-layer.h
   poppler.h
-  poppler-enums.h
 ''')
 
+env['GLIB_MKENUMS_ARGV'] = r'--template glib/poppler-enums.h.template'
+env.MkenumsGenerator('poppler-enums.h', poppler_glib_public_headers)
 env['EXPORT_REGEX']='poppler_'
-env.DefGeneratorByRegex('libpoppler-glib.def', poppler_glib_public_headers)
+env.DefGeneratorByRegex('libpoppler-glib.def', poppler_glib_public_headers + ['poppler-enums.h'])

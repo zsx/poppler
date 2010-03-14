@@ -34,6 +34,7 @@ cmd = 'cmake -G "NMake Makefiles" ' + args
 env.Alias("install", 
     env.Command('poppler.lib', ['#CMakeLists.txt', 'glib/libpoppler-glib.def'], '''
         %s
+        del glib\\poppler-enums.h
         nmake
         nmake install'''% (cmd)
     )
