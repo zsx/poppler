@@ -19,16 +19,16 @@ args = '\
 -DEXTRA_INCLUDE:PATH=../msvc \
 -DGLIB2_MKENUMS:FILEPATH=%s/bin/glib-mkenums.pl \
 -DPNG_PNG_INCLUDE_DIR:PATH=%s/include/libpng12 \
--DGTK2_GLIBCONFIG_INCLUDE_DIR:PATH=C:/FOSS/Debug/lib/glib-2.0/include \
+-DGTK2_GLIBCONFIG_INCLUDE_DIR:PATH=%s/lib/glib-2.0/include \
 -DWITH_Qt3:BOOL=0 \
--DGTK2_GTK_LIBRARY:FILEPATH=C:/FOSS/Debug/lib/gtk-win32-2.0.lib \
+-DGTK2_GTK_LIBRARY:FILEPATH=%s/lib/gtk-win32-2.0.lib \
 -DWITH_Qt4:BOOL=0 \
 -DBUILD_QT3_TESTS:BOOL=0 \
 -DBUILD_QT4_TESTS:BOOL=0 \
 -DENABLE_ABIWORD:BOOL=0 \
 -DENABLE_LCMS:BOOL=0 \
 -DENABLE_ZLIB:BOOL=1 \
--DENABLE_LIBOPENJPEG:BOOL=0' % ((env['PREFIX'],)*6)
+-DENABLE_LIBOPENJPEG:BOOL=0' % ((env['PREFIX'],)*8)
 
 cmd = 'cmake -G "NMake Makefiles" ' + args
 env.Alias("install", 
@@ -40,3 +40,8 @@ env.Alias("install",
     )
 )
 SConscript('glib/SConscript', 'env')
+env['DOT_IN_SUBS']={'@VERSION@':'0.13.1',
+                    '@PREFIX@': env['PREFIX']}
+env.DotIn('popplerrun.wxs', 'popplerrun.wxs.in')
+env.DotIn('popplerdev.wxs', 'popplerdev.wxs.in')
+env.Alias('install', env.Install('$PREFIX/wxs', ['popplerrun.wxs', 'popplerdev.wxs']))

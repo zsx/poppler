@@ -1,0 +1,81 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+	<Module Id='LibpopplerDev' Language='1033' Version='@VERSION@'>
+		<Package Id='2baf9683-c959-45ea-89c5-af9686fa9fc6' Description='Libpoppler devlopement package'
+			Comments='This is a windows installer for libpoppler library devlopment files'
+			Manufacturer='Gnome4Win' InstallerVersion='200' />
+
+		<Directory Id='TARGETDIR' Name='SourceDir'>
+			<Directory Id='include' Name='include'>
+				<Directory Id='poppler' Name='poppler'>
+					<Directory Id='glib' Name='glib'>
+						<Component Id='glibheaders' Guid='8fa7d445-6781-474e-8d8a-524bd14491d3'>
+							<!--
+							:s/.*glib\/\(.*\.h\)/<File Id='glib\1' Name='\1' Source='@PREFIX@\/include\/poppler\/glib\/\1' \/>
+							:s/-/_/
+							-->
+							<File Id='glibpoppler_action.h' Name='poppler-action.h' Source='@PREFIX@/include/poppler/glib/poppler-action.h' />
+							<File Id='glibpoppler_date.h' Name='poppler-date.h' Source='@PREFIX@/include/poppler/glib/poppler-date.h' />
+							<File Id='glibpoppler_document.h' Name='poppler-document.h' Source='@PREFIX@/include/poppler/glib/poppler-document.h' />
+							<File Id='glibpoppler_page.h' Name='poppler-page.h' Source='@PREFIX@/include/poppler/glib/poppler-page.h' />
+							<File Id='glibpoppler_attachment.h' Name='poppler-attachment.h' Source='@PREFIX@/include/poppler/glib/poppler-attachment.h' />
+							<File Id='glibpoppler_form_field.h' Name='poppler-form-field.h' Source='@PREFIX@/include/poppler/glib/poppler-form-field.h' />
+							<File Id='glibpoppler_annot.h' Name='poppler-annot.h' Source='@PREFIX@/include/poppler/glib/poppler-annot.h' />
+							<File Id='glibpoppler_layer.h' Name='poppler-layer.h' Source='@PREFIX@/include/poppler/glib/poppler-layer.h' />
+							<File Id='glibpoppler.h' Name='poppler.h' Source='@PREFIX@/include/poppler/glib/poppler.h' />
+							<File Id='glibpoppler_enums.h' Name='poppler-enums.h' Source='@PREFIX@/include/poppler/glib/poppler-enums.h' />
+							<File Id='glibpoppler_features.h' Name='poppler-features.h' Source='@PREFIX@/include/poppler/glib/poppler-features.h' />
+						</Component>
+					</Directory>
+					<Directory Id='cpp' Name='cpp'>
+						<!--
+						:s/.*cpp\/\(.*\.h\)/<File Id='cpp\1' Name='\1' Source='@PREFIX@\/include\/poppler\/cpp\/\1' \/>
+						:s/-/_/
+						C:/FOSS/Debug/include/poppler/cpp/poppler-document.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-embedded-file.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-font.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-global.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-page.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-page-transition.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-rectangle.h
+						C:/FOSS/Debug/include/poppler/cpp/poppler-toc.h
+						C:/FOSS/DEBUG/include/poppler/cpp/poppler-version.h
+						-->
+						<Component Id='cppheaders' Guid='b8295a3e-dec2-4945-883a-3b50cae2058d'>
+							<File Id='cpppoppler_document.h' Name='poppler-document.h' Source='@PREFIX@/include/poppler/cpp/poppler-document.h' />
+							<File Id='cpppoppler_embedded_file.h' Name='poppler-embedded-file.h' Source='@PREFIX@/include/poppler/cpp/poppler-embedded-file.h' />
+							<File Id='cpppoppler_font.h' Name='poppler-font.h' Source='@PREFIX@/include/poppler/cpp/poppler-font.h' />
+							<File Id='cpppoppler_global.h' Name='poppler-global.h' Source='@PREFIX@/include/poppler/cpp/poppler-global.h' />
+							<File Id='cpppoppler_page.h' Name='poppler-page.h' Source='@PREFIX@/include/poppler/cpp/poppler-page.h' />
+							<File Id='cpppoppler_page_transition.h' Name='poppler-page-transition.h' Source='@PREFIX@/include/poppler/cpp/poppler-page-transition.h' />
+							<File Id='cpppoppler_rectangle.h' Name='poppler-rectangle.h' Source='@PREFIX@/include/poppler/cpp/poppler-rectangle.h' />
+							<File Id='cpppoppler_toc.h' Name='poppler-toc.h' Source='@PREFIX@/include/poppler/cpp/poppler-toc.h' />
+							<File Id='cpppoppler_version.h' Name='poppler-version.h' Source='@PREFIX@/include/poppler/cpp/poppler-version.h' />
+						</Component>
+					</Directory>
+				</Directory>
+			</Directory>
+			<Directory Id='lib' Name='lib'>
+				<Component Id='libs' Guid='2eb36763-8e90-4c1f-8077-c6e17600f714'>
+					<File Id='poppler_glib.lib' Name='poppler-glib.lib' Source='@PREFIX@/lib/poppler-glib.lib' />
+					<File Id='poppler_cpp.lib' Name='poppler-cpp.lib' Source='@PREFIX@/lib/poppler-cpp.lib' />
+					<File Id='poppler.lib' Name='poppler.lib' Source='@PREFIX@/lib/poppler.lib' />
+				</Component>
+				<Directory Id='pkgconfig' Name='pkgconfig'>
+					<Component Id='pcs' Guid='78b25ac0-cc47-4ce4-a1b6-c11fe0a3a8f1'>
+						<File Id='poppler_glib.pc' Name='poppler-glib.pc' Source='@PREFIX@/lib/pkgconfig/poppler-glib.pc' />
+						<File Id='poppler_cairo.pc' Name='poppler-cairo.pc' Source='@PREFIX@/lib/pkgconfig/poppler-cairo.pc' />
+						<File Id='poppler_splash.pc' Name='poppler-splash.pc' Source='@PREFIX@/lib/pkgconfig/poppler-splash.pc' />
+						<File Id='poppler_cpp.pc' Name='poppler-cpp.pc' Source='@PREFIX@/lib/pkgconfig/poppler-cpp.pc' />
+						<File Id='poppler.pc' Name='poppler.pc' Source='@PREFIX@/lib/pkgconfig/poppler.pc' />
+					</Component>
+				</Directory>
+			</Directory>
+			<Directory Id='pdb' Name='pdb'>
+				<Component Id='pdbs' Guid='2177a332-40e6-4907-96b5-b13b943d0546'>
+					<File Id='poppler.pdb' Name='poppler.pdb' Source='@PREFIX@/pdb/poppler.pdb' />
+				</Component>
+			</Directory>
+		</Directory>
+	</Module>
+</Wix>
