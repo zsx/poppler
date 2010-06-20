@@ -8,15 +8,15 @@
       <Directory Id='TARGETDIR' Name='SourceDir'>
 		  <Directory Id='dlls' Name='bin'>
 			  <Component Id='dlls' Guid='05ac0ee9-d316-4e46-abc9-9dc23e72315f'>
-				  <File Id='pdftoppm' Name='pdftoppm' Source='@PREFIX@/bin\pdftoppm.exe' />
-				  <File Id='pdffonts' Name='pdffonts' Source='@PREFIX@/bin\pdffonts.exe' />
-				  <File Id='pdfimages' Name='pdfimages' Source='@PREFIX@/bin\pdfimages.exe' />
-				  <File Id='pdftops' Name='pdftops' Source='@PREFIX@/bin\pdftops.exe' />
-				  <File Id='pdftotext' Name='pdftotext' Source='@PREFIX@/bin\pdftotext.exe' />
-				  <File Id='pdfinfo' Name='pdfinfo' Source='@PREFIX@/bin\pdfinfo.exe' />
-				  <File Id='pdftohtml' Name='pdftohtml' Source='@PREFIX@/bin\pdftohtml.exe' />
-				  <File Id='poppler_glib' Name='poppler-glib' Source='@PREFIX@/bin\poppler-glib.dll' />
-				  <File Id='poppler_cpp' Name='poppler-cpp' Source='@PREFIX@/bin\poppler-cpp.dll' />
+				  <File Id='pdftoppm' Name='pdftoppm.exe' Source='@PREFIX@/bin\pdftoppm.exe' />
+				  <File Id='pdffonts' Name='pdffonts.exe' Source='@PREFIX@/bin\pdffonts.exe' />
+				  <File Id='pdfimages' Name='pdfimages.exe' Source='@PREFIX@/bin\pdfimages.exe' />
+				  <File Id='pdftops' Name='pdftops.exe' Source='@PREFIX@/bin\pdftops.exe' />
+				  <File Id='pdftotext' Name='pdftotext.exe' Source='@PREFIX@/bin\pdftotext.exe' />
+				  <File Id='pdfinfo' Name='pdfinfo.exe' Source='@PREFIX@/bin\pdfinfo.exe' />
+				  <File Id='pdftohtml' Name='pdftohtml.exe' Source='@PREFIX@/bin\pdftohtml.exe' />
+				  <File Id='poppler_glib' Name='poppler-glib.dll' Source='@PREFIX@/bin\poppler-glib.dll' />
+				  <File Id='poppler_cpp' Name='poppler-cpp.dll' Source='@PREFIX@/bin\poppler-cpp.dll' />
 			  </Component>
 		  </Directory>
       </Directory>
